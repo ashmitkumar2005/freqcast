@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+// Using your exact file
+const sfPro = localFont({
+  src: [{ path: "./fonts/SF-Pro-Display-Regular.otf", weight: "400", style: "normal" }],
+  display: "swap",
+  variable: "--font-sfpro",
+});
 
 export const metadata: Metadata = {
   title: "FreqCast",
   description: "Creators broadcast audio. Listeners tune in by frequency.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-black text-white antialiased`}>
+      <body className={`${sfPro.className} bg-black text-white antialiased`}>
         <Navbar />
-        {/* top padding so content isn't hidden behind the fixed navbar */}
         <div className="pt-16">{children}</div>
       </body>
     </html>
