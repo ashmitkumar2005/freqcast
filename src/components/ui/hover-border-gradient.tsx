@@ -1,41 +1,46 @@
 "use client";
 import React from "react";
 
-type ElementTag = keyof JSX.IntrinsicElements | React.ComponentType<any>;
+type ElementTag = React.ElementType;
 
-type HoverBorderGradientProps = {
-  as?: ElementTag; // "div" | "button" | "a" ...
+type PolymorphicProps<C extends ElementTag> = {
+  as?: C;
   containerClassName?: string;
   className?: string;
   children?: React.ReactNode;
-} & React.HTMLAttributes<HTMLElement>;
+} & Omit<React.ComponentPropsWithoutRef<C>, "as" | "className" | "children">;
 
-export function HoverBorderGradient({
-  as: Tag = "div",
-  containerClassName = "",
-  className = "",
-  children,
-  ...props
-}: HoverBorderGradientProps) {
-  const Comp: any = Tag;
+type PolymorphicRef<C extends ElementTag> = React.ComponentPropsWithRef<C>["ref"];
+
+const HoverBorderGradientInner = <C extends ElementTag = "div">(
+  {
+    as,
+    containerClassName = "",
+    className = "",
+    children,
+    ...rest
+  }: PolymorphicProps<C>,
+  ref: PolymorphicRef<C>
+) => {
+  const Comp = (as || "div") as ElementTag;
 
   return (
-    <div
-      className={`group relative inline-flex items-center overflow-hidden p-[2px] ${containerClassName}`}
-      // rounded-... comes from containerClassName so borders match inner element
-    >
+    <div className={`group relative inline-flex items-center overflow-hidden p-[2px] ${containerClassName}`}>
       {/* Gradient border */}
       <span
-        aria-hidden
+        aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-transform duration-500 group-hover:scale-110"
       />
       {/* Inner surface */}
-      <Comp
-        className={`relative z-10 rounded-[inherit] px-3 py-1.5 ${className}`}
-        {...(props as any)}
-      >
+      <Comp ref={ref} className={`relative z-10 rounded-[inherit] px-3 py-1.5 ${className}`} {...(rest as any)}>
         {children}
       </Comp>
     </div>
   );
-}
+};
+
+export const HoverBorderGradient = React.forwardRef(HoverBorderGradientInner) as <
+  C extends ElementTag = "div"
+>(
+  props: PolymorphicProps<C> & { ref?: PolymorphicRef<C> }
+) => React.ReactElement | null;
