@@ -1,7 +1,7 @@
 "use client";
 import React, { JSX } from "react";
 
-type ElementTag<P = {}> = keyof JSX.IntrinsicElements | React.ComponentType<P>;
+type ElementTag<P = object> = keyof JSX.IntrinsicElements | React.ComponentType<P>;
 
 type HoverBorderGradientProps = {
   as?: ElementTag; // "div" | "button" | "a" ...
