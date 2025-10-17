@@ -1,7 +1,7 @@
 "use client";
 import React, { JSX } from "react";
 
-type ElementTag = keyof JSX.IntrinsicElements | React.ComponentType<any>;
+type ElementTag<P = {}> = keyof JSX.IntrinsicElements | React.ComponentType<P>;
 
 type HoverBorderGradientProps = {
   as?: ElementTag; // "div" | "button" | "a" ...
@@ -17,8 +17,7 @@ export function HoverBorderGradient({
   children,
   ...props
 }: HoverBorderGradientProps) {
-  const Comp: any = Tag;
-
+  const Comp = Tag as React.ElementType;
   return (
     <div
       className={`group relative inline-flex items-center overflow-hidden p-[2px] ${containerClassName}`}
