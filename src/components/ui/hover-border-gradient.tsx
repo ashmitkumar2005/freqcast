@@ -1,50 +1,41 @@
 "use client";
-import React from "react";
+import React, { JSX } from "react";
 
-type ElementTag = React.ElementType;
+type ElementTag = keyof JSX.IntrinsicElements | React.ComponentType<any>;
 
-type PolymorphicProps<C extends ElementTag> = {
-  as?: C;
+type HoverBorderGradientProps = {
+  as?: ElementTag; // "div" | "button" | "a" ...
   containerClassName?: string;
   className?: string;
   children?: React.ReactNode;
-} & Omit<React.ComponentPropsWithoutRef<C>, "as" | "className" | "children">;
+} & React.HTMLAttributes<HTMLElement>;
 
-type PolymorphicRef<C extends ElementTag> = React.ComponentPropsWithRef<C>["ref"];
-
-const HoverBorderGradientInner = <C extends ElementTag = "div">(
-  {
-    as,
-    containerClassName = "",
-    className = "",
-    children,
-    ...rest
-  }: PolymorphicProps<C>,
-  ref: PolymorphicRef<C>
-) => {
-  const Comp = (as || "div") as ElementTag;
+export function HoverBorderGradient({
+  as: Tag = "div",
+  containerClassName = "",
+  className = "",
+  children,
+  ...props
+}: HoverBorderGradientProps) {
+  const Comp: any = Tag;
 
   return (
-    <div className={`group relative inline-flex items-center overflow-hidden p-[2px] ${containerClassName}`}>
+    <div
+      className={`group relative inline-flex items-center overflow-hidden p-[2px] ${containerClassName}`}
+      // rounded-... comes from containerClassName so borders match inner element
+    >
       {/* Gradient border */}
       <span
-        aria-hidden="true"
+        aria-hidden
         className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-transform duration-500 group-hover:scale-110"
       />
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-<Comp
-  ref={ref}
-  className={`relative z-10 rounded-[inherit] px-3 py-1.5 ${className}`}
-  {...rest as React.ComponentPropsWithoutRef<C>}
->
-  {children}
-</Comp>
+      {/* Inner surface */}
+      <Comp
+        className={`relative z-10 rounded-[inherit] px-3 py-1.5 ${className}`}
+        {...(props as any)}
+      >
+        {children}
+      </Comp>
     </div>
   );
-};
-
-export const HoverBorderGradient = React.forwardRef(HoverBorderGradientInner) as <
-  C extends ElementTag = "div"
->(
-  props: PolymorphicProps<C> & { ref?: PolymorphicRef<C> }
-) => React.ReactElement | null;
+}
