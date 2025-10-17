@@ -31,7 +31,7 @@ export function HoverBorderGradient({
       {/* Inner surface */}
       <Comp
         className={`relative z-10 rounded-[inherit] px-3 py-1.5 ${className}`}
-        {...(props as any)}
+        {...props as React.ComponentPropsWithoutRef<typeof Comp>}
       >
         {children}
       </Comp>
