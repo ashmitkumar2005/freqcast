@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 
+
 export default function Home() {
   return (
+    
     <main className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-950 text-white">
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight">FreqCast</h1>
+        <h1 className="text-5xl font-extrabold tracking-tight"><b>FreqCast</b></h1>
         <p className="mt-4 text-lg text-gray-300">
           Creators broadcast audio. Listeners tune in by frequency.
         </p>
