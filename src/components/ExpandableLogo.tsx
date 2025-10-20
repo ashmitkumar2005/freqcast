@@ -38,6 +38,13 @@ export default function ExpandableLogo({ size = 100 }: { size?: number }) {
   const textRightPadding = 12; // px right-side padding when expanded
   const expandedTextWidth = spacingBetween + labelWidth + textRightPadding;
 
+  // White outer glow (subtle by default, brighter on hover)
+  // lighter, subtler ring
+const baseGlow =
+  "0 0 0 1px rgba(255,255,255,0.3), 0 0 10px rgba(255,255,255,0.2)";
+const hoverGlow =
+    "0 0 0 0.5px rgba(255,255,255,0.6), 0 0 14px rgba(255,255,255,0.5), 0 0 28px rgba(255,255,255,0.35)";
+
   return (
     <motion.div
       ref={containerRef}
@@ -48,27 +55,50 @@ export default function ExpandableLogo({ size = 100 }: { size?: number }) {
       onBlur={() => setHovered(false)}
       className="inline-flex items-center rounded-full"
       tabIndex={0}
+      initial={false}
+      animate={{
+        boxShadow: hovered ? hoverGlow : baseGlow,
+        borderColor: hovered ? "rgba(255,255,255,0.5)" : "rgba(82,82,82,1)",
+      }}
+      transition={spring}
       style={{
         borderRadius: 9999,
         background: "transparent",
-  border: "1px solid rgba(82, 82, 82, 1)",
-        boxShadow: "none",
+        border: "1px solid",
         overflow: "hidden",
         WebkitFontSmoothing: "antialiased",
         MozOsxFontSmoothing: "grayscale",
       }}
     >
       {/* Left: fixed logo slot so the image never moves */}
-      <div style={{ width: logoSlotWidth, height: logoSlotHeight, flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "center", padding: `${adjustedInnerPadding}px` }}>
-        <Image src="/logo.png" alt="FreqCast" width={displayedImageSize} height={displayedImageSize} />
+      <div
+        style={{
+          width: logoSlotWidth,
+          height: logoSlotHeight,
+          flex: "0 0 auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: `${adjustedInnerPadding}px`,
+        }}
+      >
+        <Image
+          src="/logo.png"
+          alt="FreqCast"
+          width={displayedImageSize}
+          height={displayedImageSize}
+        />
       </div>
 
       {/* Right: animate only this text container's width from 0 -> expandedTextWidth */}
       <motion.div
         initial={false}
-        animate={{ width: hovered ? expandedTextWidth : 0, backgroundColor: hovered ? 'rgba(255,255,255,0.02)' : 'transparent' }}
+        animate={{
+          width: hovered ? expandedTextWidth : 0,
+          backgroundColor: hovered ? "rgba(255,255,255,0.02)" : "transparent",
+        }}
         transition={spring}
-        style={{ overflow: 'hidden', display: 'flex', alignItems: 'center' }}
+        style={{ overflow: "hidden", display: "flex", alignItems: "center" }}
       >
         <div style={{ paddingLeft: spacingBetween, paddingRight: textRightPadding }}>
           <motion.span

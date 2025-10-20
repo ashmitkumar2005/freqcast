@@ -16,9 +16,9 @@ type LogoProps = {
 
 // Reusable PNG logo component that sources /public/logo.png.
 // Pass width/height to control size and className for padding/margin.
-function LogoImage({ width = 1000, height = 1000, className = "", alt = "FreqCast logo" }: LogoProps) {
+function LogoImage({ width = 1000, className = "", alt = "FreqCast logo" }: LogoProps) {
     return (
-        <Image src="/logo.png" width={width} height={height} alt={alt} className={className} priority />
+        <Image src="/logo.png" width={width* 1.5}  alt={alt} className={className} priority />
     );
 }
 
