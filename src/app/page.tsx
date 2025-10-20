@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { TailwindConnectButton } from "@/components/ui/tailwindcss-buttons";
 
 
 export default function Home() {
@@ -12,24 +13,23 @@ export default function Home() {
           Creators broadcast audio. Listeners tune in by frequency.
         </p>
 
-        <div className="mt-10 flex items-center justify-center gap-4">
-          <button
-            className="rounded-lg bg-indigo-600 px-5 py-3 font-medium hover:bg-indigo-500 transition"
-            onClick={() => alert("We’ll hook this up next!")}
+        <div className="mt-10 flex flex-col items-center justify-center gap-4">
+          <TailwindConnectButton
+            className="w-[300px]"
+            iconSize={48}
+            onClick={() => alert("Cast Your Vibe — Creator flow coming soon!")}
           >
-            Get Started
-          </button>
+            Cast Your Vibe
+          </TailwindConnectButton>
           <button
-            className="rounded-lg border border-white/20 px-5 py-3 font-medium hover:bg-white/10 transition"
-            onClick={() => alert("More coming soon 😎")}
+            className="w-48 rounded-lg border border-white/20 px-5 py-3 font-medium hover:bg-white/10 transition"
+            onClick={() => alert("Tune in — Listener flow coming soon!")}
           >
-            Learn More
+            Tune in
           </button>
         </div>
 
-        <p className="mt-6 text-sm text-gray-400">
-          Next: we’ll add Creator/Listener flows and Aceternity UI polish.
-        </p>
+        
       </section>
     </main>
   );
