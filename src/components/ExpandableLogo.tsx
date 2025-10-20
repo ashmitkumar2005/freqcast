@@ -3,9 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-export default function ExpandableLogo({ size = 40 }: { size?: number }) {
+export default function ExpandableLogo({ size = 100 }: { size?: number }) {
   // Increase the visible logo by 20% compared to the provided `size` prop
-  const effectiveSize = Math.round(size * 1.2);
+  const effectiveSize = Math.round(size * 1.1);
   const [hovered, setHovered] = useState(false);
   const [labelWidth, setLabelWidth] = useState(0);
   const labelMeasureRef = useRef<HTMLSpanElement | null>(null);
@@ -22,10 +22,10 @@ export default function ExpandableLogo({ size = 40 }: { size?: number }) {
   }, []);
 
   // collapsed inner padding for the logo slot
-  const collapsedInnerPadding = 6; // px (used previously when pill was sized)
-  const pillExtraHeight = 1; // decreased by 2px per user request
-  const logoSlotWidth = effectiveSize + collapsedInnerPadding * 2; // keep pill width unchanged
-  const logoSlotHeight = effectiveSize + collapsedInnerPadding * 2 + pillExtraHeight; // height including the extra 3px
+  const collapsedInnerPadding = 5; // px (used previously when pill was sized)
+  const pillExtraHeight = 1; // increased by 1px per user request
+  const logoSlotWidth = effectiveSize + collapsedInnerPadding * 4; // keep pill width unchanged
+  const logoSlotHeight = effectiveSize + collapsedInnerPadding * 0.5 + pillExtraHeight; // height including the extra 3px
 
   // Display image 50% larger than the provided `size` prop, but keep the pill width the same.
   const displayedImageSize = Math.round(size * 1.5);
@@ -51,7 +51,7 @@ export default function ExpandableLogo({ size = 40 }: { size?: number }) {
       style={{
         borderRadius: 9999,
         background: "transparent",
-  border: "1px solid rgba(255,255,255,0.95)",
+  border: "1px solid rgba(82, 82, 82, 1)",
         boxShadow: "none",
         overflow: "hidden",
         WebkitFontSmoothing: "antialiased",
