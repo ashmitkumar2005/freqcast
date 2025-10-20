@@ -29,7 +29,7 @@ export default function Navbar() {
                 {/* Left: exact Aceternity UI button (no changes) */}
                 <div className="shrink-0">
                     <a href="https://freqcast.vercel.app/">
-                        <ExpandableLogo size={40} />
+                        <ExpandableLogo size={45} />
                     </a>
                                 </div>
 
