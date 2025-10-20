@@ -3,8 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { HoverBorderGradient } from "./ui/hover-border-gradient"; // note the path: ./ui inside components
-import { TailwindConnectButton } from "@/components/ui/tailwindcss-buttons";
+//import { HoverBorderGradient } from "./ui/hover-border-gradient"; // note the path: ./ui inside components
+//import { TailwindConnectButton } from "@/components/ui/tailwindcss-buttons";
 import ExpandableLogo from "./ExpandableLogo";
 
 type LogoProps = {
@@ -16,11 +16,11 @@ type LogoProps = {
 
 // Reusable PNG logo component that sources /public/logo.png.
 // Pass width/height to control size and className for padding/margin.
-function LogoImage({ width = 100, className = "", alt = "FreqCast logo" }: LogoProps) {
-    return (
-        <Image src="/logo.png" width={width* 1.5}  alt={alt} className={className} priority />
-    );
-}
+// function LogoImage({ width = 100, className = "", alt = "FreqCast logo" }: LogoProps) {
+//     return (
+//         <Image src="/logo.png" width={width* 1.5}  alt={alt} className={className} priority />
+//     );
+// }
 
 export default function Navbar() {
     return (

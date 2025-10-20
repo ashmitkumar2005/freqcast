@@ -1,9 +1,8 @@
 "use client";
 import React from "react";
-import { TailwindConnectButton } from "@/components/ui/tailwindcss-buttons";
+//import { TailwindConnectButton } from "@/components/ui/tailwindcss-buttons";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
-import { SparklesCore } from "@/components/ui/sparkles";
 
 
 export default function Home() {
@@ -13,19 +12,7 @@ export default function Home() {
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
         <h1 className="text-5xl font-extrabold tracking-tight"><b>FreqCast</b></h1>
         <p className="mt-4 text-lg text-gray-300">
-          Creators Broadcast <TextHoverEffect text="VIBE"></TextHoverEffect>Listeners Tune in by
-          <span className="relative inline-block font-bold text-white ml-2">
-            FREQUENCY
-            <SparklesCore
-              className="absolute inset-0 pointer-events-none"
-              background="transparent"
-              minSize={0.4}
-              maxSize={1.2}
-              particleDensity={120}
-              particleColor="#ffffff"
-            // speed={1} // include if your component supports it
-            />
-          </span>
+          Creators <TextHoverEffect text="VIBE"></TextHoverEffect>Listeners Tune IN
         </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4">
