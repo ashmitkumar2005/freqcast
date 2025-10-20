@@ -1,35 +1,11 @@
 @import "tailwindcss";
 
-/* 🎨 Theme colors + base variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --ui-scale: 1.4; /* Default desktop UI scale */
+  --ui-scale: 1.4;
 }
 
-/* 🌙 Dark mode colors */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-/* 📱 Mobile & tablet scaling fix */
-@media (max-width: 768px) {
-  :root {
-    --ui-scale: 1.0; /* Reset scale for smaller screens */
-  }
-}
-
-/* 🧠 Optional: Smooth scaling between mobile → desktop */
-@media (min-width: 768px) and (max-width: 1440px) {
-  :root {
-    --ui-scale: calc(1 + 0.4 * ((100vw - 768px) / 672));
-  }
-}
-
-/* 💅 Tailwind theme link */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -37,18 +13,20 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* 🌍 Body styles + responsive scaling */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-
-  /* Scaling logic */
+  /* Default UI scale (140%) requested by user */
   transform-origin: top left;
   transform: scale(var(--ui-scale));
+  /* Compensate width so scaled content fits the viewport without horizontal scroll */
   width: calc(100% / var(--ui-scale));
-
-  /* 🧠 Smooth text rendering */
-  -webkit-font-smoothing: antialiased;
-  text-rendering: geometricPrecision;
 }
