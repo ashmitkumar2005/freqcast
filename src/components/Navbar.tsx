@@ -4,6 +4,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { HoverBorderGradient } from "./ui/hover-border-gradient"; // note the path: ./ui inside components
+import { TailwindConnectButton } from "@/components/ui/tailwindcss-buttons";
+import ExpandableLogo from "./ExpandableLogo";
 
 type LogoProps = {
     width?: number;
@@ -27,14 +29,7 @@ export default function Navbar() {
                 {/* Left: exact Aceternity UI button (no changes) */}
                 <div className="shrink-0">
                     <a href="https://freqcast.vercel.app/">
-                        <HoverBorderGradient
-                            containerClassName="rounded-full"
-                            as="button"
-                            className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
-                        >
-                            <LogoImage width={64} height={64} className="p-0" />
-                            <span><b>FreqCast</b></span>
-                        </HoverBorderGradient>
+                        <ExpandableLogo size={40} />
                     </a>
                                 </div>
 
