@@ -3,7 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --ui-scale: 1.28;
+  /* Define the desktop scale factor in a variable for easy changes */
+  --ui-scale-desktop: 1.33; 
 }
 
 @theme inline {
@@ -24,9 +25,41 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  /* Default UI scale (140%) requested by user */
-  transform-origin: top left;
-  transform: scale(var(--ui-scale));
-  /* Compensate width so scaled content fits the viewport without horizontal scroll */
-  width: calc(100% / var(--ui-scale));
+  /* 
+    NO scaling is applied by default.
+    This ensures mobile and tablet views are not affected and render normally.
+  */
+}
+
+/* 
+  APPLY SCALING FOR DESKTOP DEVICES ONLY
+  The `min-width: 1024px` media query targets desktop screens (the 'lg' breakpoint in Tailwind).
+*/
+@media (min-width: 1024px) {
+  body {
+    /* 
+      Solution for Chrome, Safari, Edge, etc.
+      'zoom' scales the content AND forces the layout to reflow,
+      preventing element collisions and overflow. This is the ideal solution.
+    */
+    zoom: var(--ui-scale-desktop);
+
+    /* 
+      Fallback for Firefox (and other browsers that don't support 'zoom').
+      This block is ONLY applied if the browser does not understand the 'zoom' property.
+    */
+    @supports not (zoom: 1) {
+      transform-origin: top left;
+      transform: scale(var(--ui-scale-desktop));
+      
+      /* Compensate the width to prevent horizontal scrollbars */
+      width: calc(100% / var(--ui-scale-desktop));
+      
+      /* Ensure the body is tall enough to avoid the page "jumping" or being too short */
+      min-height: calc(100vh / var(--ui-scale-desktop));
+
+      /* A safeguard to hide any minor horizontal overflow that might occur with this method */
+      overflow-x: hidden;
+    }
+  }
 }
