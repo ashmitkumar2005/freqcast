@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function ExpandableLogo({ size = 100 }: { size?: number }) {
   // Increase the visible logo by 20% compared to the provided `size` prop
-  const effectiveSize = Math.round(size * 1.1);
+  const effectiveSize = Math.round(size * 0.8);
   const [hovered, setHovered] = useState(false);
   const [labelWidth, setLabelWidth] = useState(0);
   const labelMeasureRef = useRef<HTMLSpanElement | null>(null);
