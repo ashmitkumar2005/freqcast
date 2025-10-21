@@ -12,7 +12,7 @@ export default function Home() {
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
         <h1 className="text-5xl font-extrabold tracking-tight"><b>FreqCast</b></h1>
         <p className="mt-4 text-lg text-gray-300">
-          Creators <TextHoverEffect text="VIBE"></TextHoverEffect>Listeners Tune IN
+          Creators VIBE & Listeners Tune IN
         </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4">
