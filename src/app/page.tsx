@@ -14,7 +14,7 @@ export default function Home() {
         <p className="mt-4 text-lg text-gray-300">
           Creators
           </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-4">
+        <div  data-coarse-static className="mt-10 flex flex-col items-center justify-center gap-4">
           <TextHoverEffect text="VIBE"></TextHoverEffect>
         </div>
         <div className="mt-10 flex flex-col items-center justify-center gap-4">
