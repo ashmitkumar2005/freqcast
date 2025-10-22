@@ -38,14 +38,14 @@ export default function GetStartedPage() {
                     {/* Listener Card */}
                     <Link
                         href="/listener"
-                        className="group rounded-2xl border border-zinc-800 p-8 transition transform duration-300 hover:border-zinc-400 hover:bg-zinc-900/40 hover:scale-105 hover:shadow-[0_0_15px_rgba(96,165,250,0.6)]"
+                        className="group rounded-2xl border border-zinc-800 p-8 transition transform duration-300 hover:border-zinc-400 hover:bg-zinc-900/40 hover:scale-105 hover:shadow-[0_0_20px_rgba(96,165,250,0.6)]"
                     >
                         <div className="text-xs tracking-widest uppercase text-zinc-400">
                             For listeners
                         </div>
                         <div className="mt-2 text-2xl font-medium">I’m a Listener</div>
                         <p className="mt-2 text-zinc-400">
-                            Enter a VJ's Frequency to Tune IN to their Cast
+                            Enter a VJ&apos;s Frequency to Tune IN to their Cast
                         </p>
                         <div className="mt-6 inline-flex items-center rounded-full border border-zinc-700 px-4 py-2 text-sm
                             transition transform duration-200 hover:scale-110 hover:bg-zinc-800 hover:border-zinc-500"
