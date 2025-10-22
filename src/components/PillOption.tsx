@@ -3,38 +3,41 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-export default function PillOption({ size = 100 }: { size?: number }) {
-  const effectiveSize = Math.round(size * 0.5);
+interface PillOptionProps {
+  text?: string;          // pill text
+  size?: number;          // text base size
+  length?: number;        // pill width
+  logoSrc?: string;       // logo path from /public
+  logoSize?: number;      // logo size
+  glowColor?: string;     // glow color
+}
+
+export default function PillOption({
+  text = "CREATOR",
+  size = 60,
+  length = 300,
+  logoSrc = "/creator.png",
+  logoSize,
+  glowColor = "255,0,0",
+}: PillOptionProps) {
+  const breadth = length / 5; // 5:1 ratio
   const [hovered, setHovered] = useState(false);
   const [labelHeight, setLabelHeight] = useState(0);
   const labelMeasureRef = useRef<HTMLSpanElement | null>(null);
 
-  const spring = { type: "spring" as const, stiffness: 120, damping: 20 };
+  const spring = { type: "spring" as const, stiffness: 80, damping: 25 };
 
   useEffect(() => {
     if (labelMeasureRef.current) {
-      const h = Math.ceil(labelMeasureRef.current.getBoundingClientRect().height);
-      setLabelHeight(h);
+      setLabelHeight(Math.ceil(labelMeasureRef.current.getBoundingClientRect().height));
     }
   }, []);
 
-  const collapsedInnerPadding = 5;
-  const pillExtraHeight = 1;
-  const logoSlotWidth = effectiveSize + collapsedInnerPadding * 2;
-  const logoSlotHeight = effectiveSize + collapsedInnerPadding * 2 + pillExtraHeight;
-  const displayedImageSize = Math.round(size * 1.5);
+  const spacingBetween = 8;
+  const expandedHeight = breadth + 200 + labelHeight;
 
-  let adjustedInnerPadding = Math.floor((logoSlotWidth - displayedImageSize) / 2);
-  if (adjustedInnerPadding < 2) adjustedInnerPadding = 2;
-
-  const spacingBetween = 4;
-  const expandedHeight = spacingBetween + labelHeight + 200;
-
-  // Glows
-  const baseGlow =
-    "0 0 0 1px rgba(255,255,255,0.3), 0 0 10px rgba(255,255,255,0.2)";
-  const hoverGlow =
-    "0 0 0 0.5px rgba(255,255,255,0.6), 0 0 14px rgba(255,255,255,0.5), 0 0 28px rgba(255,255,255,0.35)";
+  // Constant glow
+  const glow = `0 0 0 0.5px rgba(${glowColor},0.6), 0 0 14px rgba(${glowColor},0.5), 0 0 28px rgba(${glowColor},0.35)`;
 
   return (
     <motion.div
@@ -42,47 +45,71 @@ export default function PillOption({ size = 100 }: { size?: number }) {
       onHoverEnd={() => setHovered(false)}
       onFocus={() => setHovered(true)}
       onBlur={() => setHovered(false)}
-      className="inline-flex flex-col items-center"
-      tabIndex={0}
       initial={false}
       animate={{
-        boxShadow: hovered ? hoverGlow : baseGlow,
-        borderColor: hovered ? "rgba(255,255,255,0.5)" : "rgba(82,82,82,1)",
+        height: hovered ? expandedHeight : breadth,
+        boxShadow: glow,
       }}
       transition={spring}
       style={{
-        borderRadius: 9999,
-        backgroundColor: "transparent", // fully transparent
-        border: "1px solid",
+        width: length,
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "rgba(82,82,82,1)",
+        borderRadius: breadth / 2,
+        backgroundColor: "transparent",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         overflow: "hidden",
-        WebkitFontSmoothing: "antialiased",
-        MozOsxFontSmoothing: "grayscale",
+        position: "relative",
       }}
     >
-      {/* Logo */}
+      {/* Logo + Text container */}
       <div
         style={{
-          width: logoSlotWidth,
-          height: logoSlotHeight,
+          width: "100%",
+          height: breadth,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: `${adjustedInnerPadding}px`,
+          position: "relative",
         }}
       >
+        {/* Text perfectly centered */}
+        <span
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: size / 2,
+            textAlign: "center",
+            zIndex: 1,
+            position: "relative",
+            top: "0px",   // adjust vertical position
+            left: "0px",  // adjust horizontal position
+          }}
+        >
+          {text}
+        </span>
+
+        {/* Logo positioned before text but not affecting centering */}
         <Image
-          src="/logo.png"
-          alt="FreqCast"
-          width={displayedImageSize}
-          height={displayedImageSize}
-          style={{ backgroundColor: "transparent" }} // remove blue bg
+          src={logoSrc}
+          alt="logo"
+          width={logoSize || size / 2.2}
+          height={logoSize || size / 2.2}
+          style={{
+            position: "absolute",
+            left: `calc(50% - ${size * 1.2}px)`, // shift left relative to center
+            objectFit: "contain",
+          }}
         />
       </div>
 
-      {/* Text expanding downward */}
+      {/* Expanding text below */}
       <motion.div
         initial={false}
-        animate={{ height: hovered ? expandedHeight : 0 }}
+        animate={{ height: hovered ? 50 : 0 }}
         transition={spring}
         style={{
           overflow: "hidden",
@@ -104,7 +131,7 @@ export default function PillOption({ size = 100 }: { size?: number }) {
         </div>
       </motion.div>
 
-      {/* Hidden label measuring */}
+      {/* Hidden label for measuring */}
       <span
         ref={labelMeasureRef}
         aria-hidden
