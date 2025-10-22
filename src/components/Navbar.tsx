@@ -24,7 +24,7 @@ type LogoProps = {
 
 export default function Navbar() {
     return (
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/40">
+        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/40">
             <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
                 {/* Left: exact Aceternity UI button (no changes) */}
                 <div className="shrink-0">
