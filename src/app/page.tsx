@@ -46,15 +46,16 @@ export default function Home() {
       <section className="mx-auto max-w-3xl px-6 py-10 text-center">
         {/* FreqCast Text with Zoom-Out + Fixed Range Repel */}
         <h1
-          ref={textRef}
-          className="text-5xl font-extrabold tracking-tight transition-transform duration-500 ease-out"
-          style={{
-            transform: `scale(${animate ? 1 : 1.2}) translate(${offset.x}px, ${offset.y}px)`,
-            opacity: animate ? 1 : 0,
-          }}
-        >
-          <b>FreqCast</b>
-        </h1>
+  ref={textRef}
+  className="text-5xl font-extrabold tracking-tight transition-transform duration-500 ease-out"
+  style={{
+    transform: `scale(${animate ? 1 : 1.2}) translate(${offset.x}px, ${offset.y}px)`,
+    opacity: animate ? 1 : 0,
+    textShadow: "0 0px 5px rgba(0, 112, 255, 0.8), 0 10px 20px rgba(0, 112, 255, 0.6)",
+  }}
+>
+  <b>FreqCast</b>
+</h1>
 
         <p className="mt-4 text-lg text-gray-300">Creators</p>
 
