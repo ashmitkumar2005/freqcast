@@ -10,7 +10,7 @@ export default function Navbar() {
         {/* Left: Logo */}
         <div className="shrink-0">
           <Link href="https://freqcast.vercel.app/">
-            <ExpandableLogo size={50} />
+            <ExpandableLogo size={45} />
           </Link>
         </div>
 

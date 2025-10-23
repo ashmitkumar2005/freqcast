@@ -22,8 +22,8 @@ export default function ExpandableLogo({ size = 100 }: { size?: number }) {
   }, []);
 
   // collapsed inner padding for the logo slot
-  const collapsedInnerPadding = 5; // px (used previously when pill was sized)
-  const pillExtraHeight = 1; // increased by 1px per user request
+  const collapsedInnerPadding = 3; // px (used previously when pill was sized)
+  const pillExtraHeight = 0; // increased by 1px per user request
   const logoSlotWidth = effectiveSize + collapsedInnerPadding * 12; // keep pill width unchanged
   const logoSlotHeight = effectiveSize + collapsedInnerPadding * 2 + pillExtraHeight; // height including the extra 3px
 
