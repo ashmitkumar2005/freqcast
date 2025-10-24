@@ -49,13 +49,23 @@ export default function Home() {
 
   const startEasterEgg = () => {
     if (eggStage !== "idle") return;
-    // Begin staggered fade of content and start script lines.
+    // Begin fade and branch flow based on redeemed state
     setEggStage("fade");
     // soft audio start
     if (audioRef.current) {
       audioRef.current.volume = 0.15;
       audioRef.current.play().catch(() => {});
     }
+
+    if (redeemed) {
+      // Skip script. Go straight to chaos + CTA.
+      setTimeout(() => {
+        setEggStage("chaos");
+        setTimeout(() => setEggStage("cta"), 900);
+      }, 1200);
+      return;
+    }
+
     // drive one-line-at-a-time sequence
     const per = 4200; // ms per line window (slow, readable, cinematic)
     setLineIndex(0);
@@ -138,13 +148,25 @@ export default function Home() {
             animate={{ opacity: eggStage === "fade" ? 0 : 1, y: eggStage === "fade" ? 6 : 0 }}
             transition={{ duration: 1.3, ease: "easeInOut", delay: eggStage === "fade" ? 1.6 : 0 }}
           >
-            <HoverBorderGradient
-              containerClassName="rounded-full border border-gray-400"
-              as="button"
-              className="bg-black text-white"
-            >
-              Get Started
-            </HoverBorderGradient>
+            <div className="flex flex-col items-center gap-3">
+              <HoverBorderGradient
+                containerClassName="rounded-full border border-gray-400"
+                as="button"
+                className="w-full max-w-[300px] bg-transparent text-white flex items-center justify-center px-4 py-2"
+                onClick={() => alert("Cast Your Vibe — Creator flow coming soon!")}
+              >
+                <span className="uppercase tracking-widest font-bold">CAST YOUR VIBE</span>
+              </HoverBorderGradient>
+
+              <HoverBorderGradient
+                containerClassName="rounded-full border border-gray-400"
+                as="button"
+                className="w-full max-w-[300px] bg-transparent text-white flex items-center justify-center px-4 py-2"
+                onClick={() => alert("Tune in — Listener flow coming soon!")}
+              >
+                <span className="uppercase tracking-widest font-bold">TUNE IN</span>
+              </HoverBorderGradient>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -256,37 +278,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      <div className="mt-10 flex flex-col items-center justify-center gap-4">
-        <TextHoverEffect text="VIBE" />
-      </div>
-
-      <div className="mt-10 flex flex-col items-center justify-center gap-4">
-        <HoverBorderGradient
-          containerClassName="rounded-full border border-gray-400"
-          as="button"
-          className="w-full max-w-[300px] bg-transparent text-white flex items-center justify-center px-4 py-2"
-          onClick={() =>
-            alert("Cast Your Vibe — Creator flow coming soon!")
-          }
-        >
-          <span className="uppercase tracking-widest font-bold">
-            CAST YOUR VIBE
-          </span>
-        </HoverBorderGradient>
-
-        <HoverBorderGradient
-          containerClassName="rounded-full border border-gray-400"
-          as="button"
-          className="w-full max-w-[300px] bg-transparent text-white flex items-center justify-center px-4 py-2"
-          onClick={() =>
-            alert("Tune in — Listener flow coming soon!")
-          }
-        >
-          <span className="uppercase tracking-widest font-bold">
-            TUNE IN
-          </span>
-        </HoverBorderGradient>
-      </div>
+      
     </main>
   );
 }
