@@ -34,98 +34,72 @@ export const TextHoverEffect = ({
       height="50%"
       viewBox="0 0 300 100"
       xmlns="http://www.w3.org/2000/svg"
+      shapeRendering="geometricPrecision"
+      textRendering="geometricPrecision"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
       className="select-none"
     >
       <defs>
-        <linearGradient
-          id="textGradient"
-          gradientUnits="userSpaceOnUse"
-          cx="50%"
-          cy="50%"
-          r="25%"
-        >
-          {hovered && (
-            <>
-              <stop offset="0%" stopColor="#eab308" />
-              <stop offset="25%" stopColor="#ef4444" />
-              <stop offset="50%" stopColor="#3b82f6" />
-              <stop offset="75%" stopColor="#06b6d4" />
-              <stop offset="100%" stopColor="#8b5cf6" />
-            </>
-          )}
+        <linearGradient id="textGradient" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="25%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="50%" stopColor="#d1d5db" />
+          <stop offset="100%" stopColor="#9ca3af" />
         </linearGradient>
+
+        {/* Subtle AA filter for stroke */}
+        <filter id="softStroke" x="-5%" y="-5%" width="110%" height="110%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.15" />
+        </filter>
 
         <motion.radialGradient
           id="revealMask"
           gradientUnits="userSpaceOnUse"
-          r="20%"
-          initial={{ cx: "50%", cy: "50%" }}
-          animate={maskPosition}
-          //transition={{ duration: duration ?? 0, ease: "easeOut" }}
-
-          //example for a smoother animation below
-
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 50,
-            }}
+          r="35%"
+          initial={{ cx: "0%", cy: "50%" }}
+          animate={hovered ? maskPosition : { cx: ["0%", "100%", "0%"], cy: ["50%", "50%", "50%"] }}
+          transition={hovered ? { type: "spring", stiffness: 300, damping: 50 } : { duration: 12, ease: "easeInOut", repeat: Infinity }}
         >
           <stop offset="0%" stopColor="white" />
           <stop offset="100%" stopColor="black" />
         </motion.radialGradient>
         <mask id="textMask">
-          <rect
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            fill="url(#revealMask)"
-          />
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#revealMask)" />
         </mask>
       </defs>
+
+      {/* Base solid white fill */}
       <text
         x="50%"
         y="50%"
         textAnchor="middle"
         dominantBaseline="middle"
-        strokeWidth="1"
-        className="fill-transparent stroke-neutral-200 font-[helvetica] text-7xl font-bold dark:stroke-neutral-800"
-        style={{ opacity: hovered ? 2 : 5 }}
+        paintOrder="stroke"
+        className="fill-black text-7xl font-bold font-['Helvetica']"
+        style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", WebkitFontSmoothing: "antialiased", textRendering: "geometricPrecision" }}
       >
         {text}
       </text>
-      <motion.text
-        x="50%"
-        y="50%"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        strokeWidth="1"
-        className="fill-transparent stroke-neutral-200 font-[helvetica] text-7xl font-bold dark:stroke-neutral-800"
-        initial={{ strokeDashoffset: 1000, strokeDasharray: 1000 }}
-        animate={{
-          strokeDashoffset: 0,
-          strokeDasharray: 1000,
-        }}
-        transition={{
-          duration: 4,
-          ease: "easeInOut",
-        }}
-      >
-        {text}
-      </motion.text>
+
+      
+
+      {/* Cursor-revealed grayscale gradient stroke */}
       <text
         x="50%"
         y="50%"
         textAnchor="middle"
         dominantBaseline="middle"
         stroke="url(#textGradient)"
-        strokeWidth="0.3"
+        strokeWidth="0.8"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+        paintOrder="stroke"
         mask="url(#textMask)"
-        className="fill-transparent font-[helvetica] text-7xl font-bold"
+        className="fill-transparent text-7xl font-bold font-['Helvetica']"
+        style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", WebkitFontSmoothing: "antialiased", textRendering: "geometricPrecision" }}
+        filter="url(#softStroke)"
       >
         {text}
       </text>
