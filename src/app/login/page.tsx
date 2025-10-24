@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 type Role = "creator" | "listener";
 
@@ -36,7 +37,7 @@ export default function LoginPage() {
 
   return (
     <main
-      className="min-h-[calc(100vh-64px)] bg-black text-white"
+      className="min-h-[calc(100vh-64px)] bg-black text-white bg-fixed"
       style={{
         backgroundImage: "url(/logback.png)",
         backgroundSize: "cover",
@@ -44,10 +45,13 @@ export default function LoginPage() {
         backgroundPosition: "center",
       }}
     >
-      <section className="mx-auto max-w-md px-4 py-16">
-        <div
-          className="w-full rounded-2xl border border-white/10 bg-transparent p-8 backdrop-blur-2xl supports-[backdrop-filter]:backdrop-blur-2xl relative overflow-hidden"
+      <section className="mx-auto max-w-sm px-4 py-16">
+        <motion.div
+          className="w-full rounded-2xl border border-white/10 bg-transparent p-8 backdrop-blur-2xl supports-[backdrop-filter]:backdrop-blur-2xl relative overflow-hidden min-h-[520px]"
           style={{ boxShadow: "0 0 52px rgba(255, 255, 255, 0.10)" }}
+          initial={{ opacity: 0, y: 12, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
         >
           <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/15" />
           <div className="pointer-events-none absolute -inset-6 rounded-[28px] bg-white/20 blur-2xl opacity-15" />
@@ -90,18 +94,8 @@ export default function LoginPage() {
               />
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <label className="inline-flex items-center gap-2 text-zinc-400">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-zinc-700 bg-transparent"
-                />
-                Remember me
-              </label>
-              <Link
-                href="#"
-                className="text-zinc-300 underline-offset-4 hover:underline"
-              >
+            <div className="flex items-center justify-end text-sm">
+              <Link href="#" className="text-zinc-300 underline-offset-4 hover:underline">
                 Forgot password?
               </Link>
             </div>
@@ -124,7 +118,7 @@ export default function LoginPage() {
               Sign up
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
     </main>
   );
