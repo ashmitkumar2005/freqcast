@@ -50,8 +50,18 @@ export const TextHoverEffect = ({
 
         {/* Subtle AA filter for stroke */}
         <filter id="softStroke" x="-5%" y="-5%" width="110%" height="110%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="0.15" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.3" />
         </filter>
+
+        {/* Stronger outer glow for stroked outline */}
+        <filter id="outerGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="8" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
 
         <motion.radialGradient
           id="revealMask"
@@ -67,6 +77,7 @@ export const TextHoverEffect = ({
         <mask id="textMask">
           <rect x="0" y="0" width="100%" height="100%" fill="url(#revealMask)" />
         </mask>
+
       </defs>
 
       {/* Base solid white fill */}
@@ -84,22 +95,23 @@ export const TextHoverEffect = ({
 
       
 
-      {/* Cursor-revealed grayscale gradient stroke */}
+      {/* Moving OUTER glow reveal using stroked outline + blur (outside border) */}
       <text
         x="50%"
         y="50%"
         textAnchor="middle"
         dominantBaseline="middle"
-        stroke="url(#textGradient)"
-        strokeWidth="0.8"
+        fill="transparent"
+        stroke="white"
+        strokeWidth="2.2"
         strokeLinejoin="round"
         strokeLinecap="round"
+        opacity="0.55"
         vectorEffect="non-scaling-stroke"
-        paintOrder="stroke"
         mask="url(#textMask)"
-        className="fill-transparent text-7xl font-bold font-['Helvetica']"
+        className="text-7xl font-bold font-['Helvetica']"
         style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", WebkitFontSmoothing: "antialiased", textRendering: "geometricPrecision" }}
-        filter="url(#softStroke)"
+        filter="url(#outerGlow)"
       >
         {text}
       </text>

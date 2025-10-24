@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
+import FadeIn from "@/components/FadeIn";
 
 export default function Home() {
   const [animate, setAnimate] = useState(false);
@@ -85,18 +86,23 @@ export default function Home() {
   }, [eggStage]);
 
   return (
-    <main
-      className="relative min-h-screen bg-black text-white"
-      style={{
-        backgroundImage: "url(/homback.jpg)",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-      }}
-    >
+    <main className="relative min-h-screen bg-black text-white overflow-hidden">
+      {/* Animated background layer */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url(/homback.jpg)",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      />
       {/* background audio (optional; ignored if file missing) */}
       <audio ref={audioRef} src="/egg-ambience.mp3" preload="none" />
-      <div className="pointer-events-none absolute inset-0 z-0 bg-black/40 backdrop-blur-2xl supports-[backdrop-filter]:backdrop-blur-2xl" />
+      <div className="pointer-events-none absolute inset-0 z-10 bg-black/40 backdrop-blur-2xl supports-[backdrop-filter]:backdrop-blur-2xl" />
       <section className="relative z-10 mx-auto max-w-3xl px-6 py-10 text-center">
         {/* FreqCast Text with subtle premium gradient (no cursor reactivity) */}
         <motion.div
@@ -105,6 +111,7 @@ export default function Home() {
           animate={{ opacity: eggStage === "fade" ? 0 : 1, filter: eggStage === "fade" ? "blur(8px)" : "blur(0px)" }}
           transition={{ duration: eggStage === "fade" ? 1.4 : 0.5, ease: "easeInOut", delay: eggStage === "fade" ? 0.0 : 0 }}
         >
+          <FadeIn delay={0.1}>
           <h1
             className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-zinc-300 to-white bg-clip-text text-transparent bg-left bg-[length:200%_100%] transition-[background-position] duration-700 ease-out group-hover:bg-right transform-gpu transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 will-change-transform cursor-pointer select-none"
             style={{
@@ -121,11 +128,13 @@ export default function Home() {
           >
             <b>FreqCast</b>
           </h1>
+          </FadeIn>
           <div className="mx-auto mt-2 h-px w-0 bg-gradient-to-r from-transparent via-white/70 to-transparent transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-3/4" />
         </motion.div>
 
         {/* Stagger fade-out of the rest, one by one */}
         <div className="mt-6 space-y-10">
+          <FadeIn delay={0.2}>
           <motion.p
             className="mt-4 text-lg text-gray-300"
             initial={false}
@@ -134,6 +143,8 @@ export default function Home() {
           >
             Creators
           </motion.p>
+          </FadeIn>
+          <FadeIn delay={0.35}>
           <motion.div
             className="mt-10 flex flex-col items-center justify-center gap-4"
             initial={false}
@@ -142,6 +153,8 @@ export default function Home() {
           >
             <TextHoverEffect text="VIBE" />
           </motion.div>
+          </FadeIn>
+          <FadeIn delay={0.5}>
           <motion.div
             className="mt-10 flex flex-col items-center justify-center gap-4"
             initial={false}
@@ -168,6 +181,7 @@ export default function Home() {
               </HoverBorderGradient>
             </div>
           </motion.div>
+          </FadeIn>
         </div>
       </section>
 
