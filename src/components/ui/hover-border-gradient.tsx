@@ -46,13 +46,9 @@ export function HoverBorderGradient({
   const highlight =
     "radial-gradient(75% 181.15942028985506% at 50% 50%, #3275F8 0%, rgba(255, 255, 255, 0) 100%)";
 
+  // No idle animation: keep static when not hovered.
   useEffect(() => {
-    if (!hovered) {
-      const interval = setInterval(() => {
-        setDirection((prevState) => rotateDirection(prevState));
-      }, duration * 1000);
-      return () => clearInterval(interval);
-    }
+    // Intentionally no interval. We only animate on hover.
   }, [hovered]);
   return (
     <Tag
@@ -85,12 +81,8 @@ export function HoverBorderGradient({
           height: "100%",
         }}
         initial={{ background: movingMap[direction] }}
-        animate={{
-          background: hovered
-            ? [movingMap[direction], highlight]
-            : movingMap[direction],
-        }}
-        transition={{ ease: "linear", duration: duration ?? 1 }}
+        animate={{ background: hovered ? highlight : movingMap[direction] }}
+        transition={{ ease: "easeInOut", duration: 0.65 }}
       />
       <div className="bg-black absolute z-1 flex-none inset-[1px] rounded-[100px]" />
     </Tag>
