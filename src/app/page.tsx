@@ -5,9 +5,17 @@ import { AnimatePresence, motion } from "motion/react";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import FadeIn from "@/components/FadeIn";
+import localFont from "next/font/local";
+
+const viola = localFont({ src: "./fonts/VIOLA.ttf", weight: "400", style: "normal" });
+const casanova = localFont({ src: "./fonts/Casanova.ttf", weight: "400", style: "normal" });
+const ailerons = localFont({ src: "./fonts/Ailerons-Typeface.otf", weight: "400", style: "normal" });
+const axuno = localFont({ src: "./fonts/AxunoDemo-Regular-BF68fb7b9e28f8c.otf", weight: "400", style: "normal" });
 
 export default function Home() {
   const [animate, setAnimate] = useState(false);
+  const [mx, setMx] = useState(50); // cursor x in % of viewport
+  const [my, setMy] = useState(50); // cursor y in % of viewport
   const [eggStage, setEggStage] = useState<"idle" | "fade" | "chaos" | "script" | "cta" | "reward">("idle");
   const [redeemed, setRedeemed] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -86,15 +94,27 @@ export default function Home() {
   }, [eggStage]);
 
   return (
-    <main className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Animated background layer */}
+    <main
+      className="relative min-h-screen bg-transparent text-white overflow-hidden"
+      onMouseMove={(e) => {
+        const x = (e.clientX / window.innerWidth) * 100;
+        const y = (e.clientY / window.innerHeight) * 100;
+        setMx(x);
+        setMy(y);
+      }}
+    >
+      {/* Animated professional gradient background layer */}
       <motion.div
-        className="absolute inset-0 z-0"
+        className="fixed inset-0 -z-10"
         style={{
-          backgroundImage: "url(/homback.jpg)",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          backgroundImage: `
+                            radial-gradient(1200px 800px at ${20 + (mx - 50) * 0.06}% ${20 + (my - 50) * 0.04}%, rgba(139,92,246,0.56), transparent 60%),
+                            radial-gradient(1000px 900px at ${80 - (mx - 50) * 0.06}% ${30 - (my - 50) * 0.04}%, rgba(56,189,248,0.50), transparent 60%),
+                            radial-gradient(900px 700px at ${50 + (mx - 50) * 0.03}% ${80 + (my - 50) * 0.02}%, rgba(16,185,129,0.42), transparent 60%),
+                            /* Added accents around hero header (top-center), stronger cursor response */
+                            radial-gradient(700px 500px at ${50 + (mx - 50) * 0.10}% ${22 + (my - 50) * 0.08}%, rgba(244,114,182,0.40), transparent 65%),
+                            radial-gradient(600px 420px at ${60 + (mx - 50) * 0.10}% ${18 + (my - 50) * 0.08}%, rgba(251,191,36,0.30), transparent 65%),
+                            linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18))`,
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -102,21 +122,33 @@ export default function Home() {
       />
       {/* background audio (optional; ignored if file missing) */}
       <audio ref={audioRef} src="/egg-ambience.mp3" preload="none" />
-      <div className="pointer-events-none absolute inset-0 z-10 bg-black/40 backdrop-blur-2xl supports-[backdrop-filter]:backdrop-blur-2xl" />
-      <section className="relative z-10 mx-auto max-w-3xl px-6 py-10 text-center">
+      {/* Removed photo blur overlay for a cleaner gradient presentation */}
+      <section className="relative z-10 mx-auto max-w-3xl px-6 py-10 text-center mt-[24px]">
         {/* FreqCast Text with subtle premium gradient (no cursor reactivity) */}
         <motion.div
-          className="inline-block group"
+          className="inline-block group relative"
           initial={false}
           animate={{ opacity: eggStage === "fade" ? 0 : 1, filter: eggStage === "fade" ? "blur(8px)" : "blur(0px)" }}
           transition={{ duration: eggStage === "fade" ? 1.4 : 0.5, ease: "easeInOut", delay: eggStage === "fade" ? 0.0 : 0 }}
         >
+          {/* Soft radial glow behind title */}
+          <motion.div
+            className="pointer-events-none absolute -inset-x-24 -top-28 mx-auto left-1/2 -translate-x-1/2 h-64 rounded-full blur-3xl"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(139,92,246,0.16), rgba(56,189,248,0.10), rgba(16,185,129,0.06), transparent 70%)",
+            }}
+            initial={{ opacity: 0.3, scale: 0.98 }}
+            animate={{ opacity: 0.45, scale: [0.98, 1.04, 0.98], rotate: [0, 8, 0] }}
+            transition={{ duration: 14, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+          />
           <FadeIn delay={0.1}>
-          <h1
-            className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-zinc-300 to-white bg-clip-text text-transparent bg-left bg-[length:200%_100%] transition-[background-position] duration-700 ease-out group-hover:bg-right transform-gpu transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 will-change-transform cursor-pointer select-none"
+          <motion.h1
+            className={`${viola.className} text-5xl md:text-6xl font-normal tracking-tight text-white transform-gpu transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 will-change-transform cursor-pointer select-none`}
             style={{
               transform: `scale(${animate ? 1 : 1.12})`,
               opacity: animate ? 1 : 0,
+              textShadow: "0 1px 1px rgba(0,0,0,0.28), 0 4px 14px rgba(0,0,0,0.25), 0 10px 26px rgba(0,0,0,0.18)",
             }}
             onClick={startEasterEgg}
             role="button"
@@ -126,9 +158,20 @@ export default function Home() {
               if (e.key === "Enter" || e.key === " ") startEasterEgg();
             }}
           >
-            <b>FreqCast</b>
-          </h1>
+            <span>FreqCast</span>
+          </motion.h1>
           </FadeIn>
+          {/* Bottom, outer shadow under the title for visibility on bright backgrounds */}
+          <motion.div
+            className="pointer-events-none absolute left-1/2 top-full mt-2 h-6 w-3/4 -translate-x-1/2 rounded-[999px]"
+            style={{
+              background: "radial-gradient(closest-side, rgba(0,0,0,0.35), rgba(0,0,0,0.18), transparent 70%)",
+              filter: "blur(12px)",
+            }}
+            initial={{ opacity: 0.45, scaleX: 0.98 }}
+            animate={{ opacity: [0.45, 0.6, 0.45], scaleX: [0.98, 1.02, 0.98] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
           <div className="mx-auto mt-2 h-px w-0 bg-gradient-to-r from-transparent via-white/70 to-transparent transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-3/4" />
         </motion.div>
 
@@ -136,45 +179,45 @@ export default function Home() {
         <div className="mt-6 space-y-10">
           <FadeIn delay={0.2}>
           <motion.p
-            className="mt-4 text-lg text-gray-300"
+            className={`${ailerons.className} mt-[10px] text-2xl md:text-3xl text-black font-bold tracking-wide`}
             initial={false}
             animate={{ opacity: eggStage === "fade" ? 0 : 1, y: eggStage === "fade" ? 6 : 0 }}
             transition={{ duration: 1.3, ease: "easeInOut", delay: eggStage === "fade" ? 0.4 : 0 }}
           >
-            Creators
+            The Creators
           </motion.p>
           </FadeIn>
           <FadeIn delay={0.35}>
           <motion.div
-            className="mt-10 flex flex-col items-center justify-center gap-4"
+            className="mt-5 flex flex-col items-center justify-center gap-4"
             initial={false}
             animate={{ opacity: eggStage === "fade" ? 0 : 1, y: eggStage === "fade" ? 6 : 0 }}
             transition={{ duration: 1.3, ease: "easeInOut", delay: eggStage === "fade" ? 1.0 : 0 }}
           >
-            <TextHoverEffect text="VIBE" />
+            <TextHoverEffect text="VIBE" className={`${axuno.className}`} />
           </motion.div>
           </FadeIn>
           <FadeIn delay={0.5}>
           <motion.div
-            className="mt-10 flex flex-col items-center justify-center gap-4"
+            className="mt-10 flex flex-col items-center justify-center gap-5"
             initial={false}
             animate={{ opacity: eggStage === "fade" ? 0 : 1, y: eggStage === "fade" ? 6 : 0 }}
             transition={{ duration: 1.3, ease: "easeInOut", delay: eggStage === "fade" ? 1.6 : 0 }}
           >
             <div className="flex flex-col items-center gap-3">
               <HoverBorderGradient
-                containerClassName="rounded-full border border-gray-400"
+                containerClassName="rounded-full border border-white/20 bg-white/10 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition"
                 as="button"
-                className="w-full max-w-[300px] bg-transparent text-white flex items-center justify-center px-4 py-2"
+                className="w-full max-w-[360px] bg-transparent text-white flex items-center justify-center px-6 py-3 text-sm tracking-widest font-semibold uppercase transition transform hover:scale-[1.04]"
                 onClick={() => alert("Cast Your Vibe — Creator flow coming soon!")}
               >
                 <span className="uppercase tracking-widest font-bold">CAST YOUR VIBE</span>
               </HoverBorderGradient>
 
               <HoverBorderGradient
-                containerClassName="rounded-full border border-gray-400"
+                containerClassName="rounded-full border border-white/20 bg-white/10 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition"
                 as="button"
-                className="w-full max-w-[300px] bg-transparent text-white flex items-center justify-center px-4 py-2"
+                className="w-full max-w-[360px] bg-transparent text-white flex items-center justify-center px-6 py-3 text-sm tracking-widest font-semibold uppercase transition transform hover:scale-[1.04]"
                 onClick={() => alert("Tune in — Listener flow coming soon!")}
               >
                 <span className="uppercase tracking-widest font-bold">TUNE IN</span>

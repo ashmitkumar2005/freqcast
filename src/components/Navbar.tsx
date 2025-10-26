@@ -5,17 +5,17 @@ import ExpandableLogo from "./ExpandableLogo";
 
 export default function Navbar() {
   return (
-    <header className="fixed inset-x-0 top-0 z-100 border-b border-white/0 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/40">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        {/* Left: Logo */}
+    <header className="fixed inset-x-0 top-0 z-100 bg-transparent supports-[backdrop-filter]:bg-transparent">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        {/* Left: Logo (at far left) */}
         <div className="shrink-0">
           <Link href="https://freqcast.vercel.app/">
             <ExpandableLogo size={45} />
           </Link>
         </div>
 
-        {/* Right: Links */}
-        <nav className="flex items-center gap-3 text-sm text-gray-300">
+        {/* Right: Floating links (no pill) */}
+        <nav className="flex items-center gap-4 text-sm text-gray-200">
           {/* GitHub Button */}
           <Link
             href="https://github.com/ashmitkumar69/freqcast"

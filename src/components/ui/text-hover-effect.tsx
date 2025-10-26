@@ -5,10 +5,12 @@ import { motion } from "motion/react";
 export const TextHoverEffect = ({
   text,
   duration,
+  className,
 }: {
   text: string;
   duration?: number;
   automatic?: boolean;
+  className?: string;
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
@@ -39,7 +41,7 @@ export const TextHoverEffect = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
-      className="select-none"
+      className={`select-none ${className ?? ""}`}
     >
       <defs>
         <linearGradient id="textGradient" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="25%">
@@ -69,7 +71,7 @@ export const TextHoverEffect = ({
           r="35%"
           initial={{ cx: "0%", cy: "50%" }}
           animate={hovered ? maskPosition : { cx: ["0%", "100%", "0%"], cy: ["50%", "50%", "50%"] }}
-          transition={hovered ? { type: "spring", stiffness: 300, damping: 50 } : { duration: 12, ease: "easeInOut", repeat: Infinity }}
+          transition={hovered ? { type: "spring", stiffness: 80, damping: 100 } : { duration: 13.2, ease: "easeInOut", repeat: Infinity }}
         >
           <stop offset="0%" stopColor="white" />
           <stop offset="100%" stopColor="black" />
@@ -80,22 +82,29 @@ export const TextHoverEffect = ({
 
       </defs>
 
-      {/* Base solid white fill */}
+      {/* Base subtle fill with thin outline for a refined, outlined look */}
       <text
         x="50%"
         y="50%"
         textAnchor="middle"
         dominantBaseline="middle"
         paintOrder="stroke"
-        className="fill-black text-7xl font-bold font-['Helvetica']"
-        style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", WebkitFontSmoothing: "antialiased", textRendering: "geometricPrecision" }}
+        className="text-7xl font-bold"
+        style={{
+          WebkitFontSmoothing: "antialiased",
+          textRendering: "geometricPrecision",
+          fill: "#000000",
+          stroke: "#000000",
+          strokeWidth: 0.35,
+          fontWeight: 1000,
+        }}
       >
         {text}
       </text>
 
       
 
-      {/* Moving OUTER glow reveal using stroked outline + blur (outside border) */}
+      {/* Moving OUTER glow reveal using stroked outline + blur (outside border), softened */}
       <text
         x="50%"
         y="50%"
@@ -103,14 +112,14 @@ export const TextHoverEffect = ({
         dominantBaseline="middle"
         fill="transparent"
         stroke="white"
-        strokeWidth="2.2"
+        strokeWidth="1.6"
         strokeLinejoin="round"
         strokeLinecap="round"
-        opacity="0.55"
+        opacity="1"
         vectorEffect="non-scaling-stroke"
         mask="url(#textMask)"
-        className="text-7xl font-bold font-['Helvetica']"
-        style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", WebkitFontSmoothing: "antialiased", textRendering: "geometricPrecision" }}
+        className="text-7xl font-bold"
+        style={{ WebkitFontSmoothing: "antialiased", textRendering: "geometricPrecision", fontWeight: 800 }}
         filter="url(#outerGlow)"
       >
         {text}

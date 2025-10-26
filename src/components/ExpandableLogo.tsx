@@ -2,6 +2,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import localFont from "next/font/local";
+
+const viola = localFont({ src: "../app/fonts/VIOLA.ttf", weight: "400", style: "normal" });
 
 export default function ExpandableLogo({ size = 100 }: { size?: number }) {
   // Increase the visible logo by 20% compared to the provided `size` prop
@@ -105,7 +108,7 @@ const hoverGlow =
             initial={{ opacity: 0 }}
             animate={hovered ? { opacity: 1 } : { opacity: 0 }}
             transition={{ ...spring, duration: 0.25 }}
-            className="text-white font-semibold whitespace-nowrap"
+            className={`${viola.className} text-white font-normal whitespace-nowrap`}
             style={{ pointerEvents: "none" }}
           >
             FreqCast
@@ -125,6 +128,7 @@ const hoverGlow =
           left: -9999,
           top: -9999,
         }}
+        className={viola.className}
       >
         FreqCast
       </span>
