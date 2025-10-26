@@ -93,11 +93,14 @@ export const TextHoverEffect = ({
         style={{
           WebkitFontSmoothing: "antialiased",
           textRendering: "geometricPrecision",
+          fontWeight: 1000,
           fill: "#000000",
           stroke: "#000000",
           strokeWidth: 0.35,
-          fontWeight: 1000,
         }}
+        vectorEffect="non-scaling-stroke"
+        strokeLinejoin="round"
+        strokeLinecap="round"
       >
         {text}
       </text>
