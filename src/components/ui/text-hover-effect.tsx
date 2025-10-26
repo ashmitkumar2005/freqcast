@@ -16,8 +16,17 @@ export const TextHoverEffect = ({
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
   const [maskPosition, setMaskPosition] = useState({ cx: "50%", cy: "50%" });
+  const [isChrome, setIsChrome] = useState(false);
+  const [maskPosNum, setMaskPosNum] = useState<{ cx: number; cy: number }>({ cx: 150, cy: 50 });
 
   useEffect(() => {
+    // Detect Chrome on client to tweak visual styles without changing markup
+    try {
+      const ua = navigator.userAgent;
+      const chrome = /Chrome\//.test(ua) && !/Edg\//.test(ua) && !/OPR\//.test(ua);
+      if (chrome) setIsChrome(true);
+    } catch {}
+
     if (svgRef.current && cursor.x !== null && cursor.y !== null) {
       const svgRect = svgRef.current.getBoundingClientRect();
       const cxPercentage = ((cursor.x - svgRect.left) / svgRect.width) * 100;
@@ -26,6 +35,10 @@ export const TextHoverEffect = ({
         cx: `${cxPercentage}%`,
         cy: `${cyPercentage}%`,
       });
+      // Also compute numeric coordinates in viewBox space (300x100)
+      const cxNum = ((cursor.x - svgRect.left) / svgRect.width) * 300;
+      const cyNum = ((cursor.y - svgRect.top) / svgRect.height) * 100;
+      setMaskPosNum({ cx: cxNum, cy: cyNum });
     }
   }, [cursor]);
 
@@ -33,9 +46,10 @@ export const TextHoverEffect = ({
     <svg
       ref={svgRef}
       width="100%"
-      height="50%"
       viewBox="0 0 300 100"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+      colorInterpolationFilters="sRGB"
       shapeRendering="geometricPrecision"
       textRendering="geometricPrecision"
       onMouseEnter={() => setHovered(true)}
@@ -55,29 +69,39 @@ export const TextHoverEffect = ({
           <feGaussianBlur in="SourceGraphic" stdDeviation="0.3" />
         </filter>
 
-        {/* Stronger outer glow for stroked outline */}
+        {/* Softer outer glow */}
         <filter id="outerGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="8" result="blur" />
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
 
-
-        <motion.radialGradient
-          id="revealMask"
-          gradientUnits="userSpaceOnUse"
-          r="35%"
-          initial={{ cx: "0%", cy: "50%" }}
-          animate={hovered ? maskPosition : { cx: ["0%", "100%", "0%"], cy: ["50%", "50%", "50%"] }}
-          transition={hovered ? { type: "spring", stiffness: 80, damping: 100 } : { duration: 13.2, ease: "easeInOut", repeat: Infinity }}
-        >
-          <stop offset="0%" stopColor="white" />
-          <stop offset="100%" stopColor="black" />
-        </motion.radialGradient>
-        <mask id="textMask">
-          <rect x="0" y="0" width="100%" height="100%" fill="url(#revealMask)" />
+        {/* Blur the mask circle to feather the edge */}
+        <filter id="maskBlur" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="10" />
+        </filter>
+        {/* Feathered mask with moving circle (Chrome-friendly) */}
+        <mask id="textMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+          <rect x="0" y="0" width="300" height="100" fill="black" />
+          <motion.circle
+            r={26}
+            initial={{ cx: 0, cy: 50 }}
+            animate={
+              hovered
+                ? { cx: maskPosNum.cx, cy: maskPosNum.cy }
+                : { cx: [0, 300, 0], cy: [50, 50, 50] }
+            }
+            transition={
+              hovered
+                ? { type: "spring", stiffness: 80, damping: 100 }
+                : { duration: 12, ease: "easeInOut", repeat: Infinity }
+            }
+            style={{ willChange: "cx, cy" }}
+            filter="url(#maskBlur)"
+            fill="white"
+          />
         </mask>
 
       </defs>
@@ -89,14 +113,16 @@ export const TextHoverEffect = ({
         textAnchor="middle"
         dominantBaseline="middle"
         paintOrder="stroke"
-        className="text-7xl font-bold"
+        className={`text-7xl font-bold ${className ?? ''}`}
         style={{
           WebkitFontSmoothing: "antialiased",
           textRendering: "geometricPrecision",
-          fontWeight: 1000,
+          fontFamily: "var(--font-axuno), sans-serif",
+          fontSynthesis: "none",
+          fontWeight: 400,
           fill: "#000000",
           stroke: "#000000",
-          strokeWidth: 0.35,
+          strokeWidth: 0.2,
         }}
         vectorEffect="non-scaling-stroke"
         strokeLinejoin="round"
@@ -115,14 +141,20 @@ export const TextHoverEffect = ({
         dominantBaseline="middle"
         fill="transparent"
         stroke="white"
-        strokeWidth="1.6"
+        strokeWidth="0.7"
         strokeLinejoin="round"
         strokeLinecap="round"
-        opacity="1"
+        opacity={0.55}
         vectorEffect="non-scaling-stroke"
         mask="url(#textMask)"
-        className="text-7xl font-bold"
-        style={{ WebkitFontSmoothing: "antialiased", textRendering: "geometricPrecision", fontWeight: 800 }}
+        className={`text-7xl font-bold ${className ?? ''}`}
+        style={{
+          WebkitFontSmoothing: "antialiased",
+          textRendering: "geometricPrecision",
+          fontFamily: "var(--font-axuno), sans-serif",
+          fontSynthesis: "none",
+          fontWeight: 400,
+        }}
         filter="url(#outerGlow)"
       >
         {text}

@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body
-        className={`${sfPro.className} min-h-screen flex flex-col bg-transparent text-white antialiased`}
+        className={`${sfPro.className} ${sfPro.variable} min-h-screen flex flex-col bg-transparent text-white antialiased`}
       >
         {/* Global background covering navbar, content, and footer */}
         <div

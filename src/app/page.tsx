@@ -10,7 +10,7 @@ import localFont from "next/font/local";
 const viola = localFont({ src: "./fonts/VIOLA.ttf", weight: "400", style: "normal" });
 const casanova = localFont({ src: "./fonts/Casanova.ttf", weight: "400", style: "normal" });
 const ailerons = localFont({ src: "./fonts/Ailerons-Typeface.otf", weight: "400", style: "normal" });
-const axuno = localFont({ src: "./fonts/AxunoDemo-Regular-BF68fb7b9e28f8c.otf", weight: "400", style: "normal" });
+const axuno = localFont({ src: "./fonts/AxunoDemo-Regular-BF68fb7b9e28f8c.otf", weight: "400", style: "normal", display: "block", variable: "--font-axuno" });
 
 export default function Home() {
   const [animate, setAnimate] = useState(false);
@@ -194,7 +194,7 @@ export default function Home() {
             animate={{ opacity: eggStage === "fade" ? 0 : 1, y: eggStage === "fade" ? 6 : 0 }}
             transition={{ duration: 1.3, ease: "easeInOut", delay: eggStage === "fade" ? 1.0 : 0 }}
           >
-            <TextHoverEffect text="VIBE" className={`${axuno.className}`} />
+            <TextHoverEffect text="VIBE" className={`${axuno.variable}`} />
           </motion.div>
           </FadeIn>
           <FadeIn delay={0.5}>
